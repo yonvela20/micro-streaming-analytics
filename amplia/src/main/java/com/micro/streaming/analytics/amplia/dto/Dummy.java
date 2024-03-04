@@ -1,9 +1,13 @@
 package com.micro.streaming.analytics.amplia.dto;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Document(collection = "dummies")
 public class Dummy {
+    @Id
     private int id;
 
     private String firstName;

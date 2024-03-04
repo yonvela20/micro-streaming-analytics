@@ -35,20 +35,6 @@ public class RabbitMQProducer {
     }
 
     // Generate dummy object every 3 seconds
-    // @Scheduled(fixedDelay = 3000)
-    public void sendMessage(){
-        // TODO: Generate a proper object following opengate doc
-        Dummy dummy = new Dummy();
-
-        dummy.setId(new Random().nextInt(10));
-        dummy.setFirstName("new user " + dummy.getId());
-        dummy.setLastName("generic info");
-
-        LOGGER.info(String.format("Message sent -> %s", dummy.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingKey, dummy);
-    }
-
-
     @Scheduled(fixedDelay = 3000)
     public void generateData() {
         // We create a list of datapoints
@@ -84,5 +70,3 @@ public class RabbitMQProducer {
         rabbitTemplate.convertAndSend(exchange, routingKey, datacollection);
     }
 }
-
-

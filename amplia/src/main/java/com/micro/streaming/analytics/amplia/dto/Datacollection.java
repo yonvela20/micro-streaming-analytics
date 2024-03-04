@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 @Data
 public class Datacollection {
+    // TODO: Ask for more in depth object values
     private String version;
     private ArrayList<Datastreams> datastreams;
 
