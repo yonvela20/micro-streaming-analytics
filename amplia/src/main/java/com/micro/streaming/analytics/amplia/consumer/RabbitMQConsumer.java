@@ -1,6 +1,6 @@
 package com.micro.streaming.analytics.amplia.consumer;
 
-import com.micro.streaming.analytics.amplia.dto.Dummy;
+import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,8 +11,8 @@ public class RabbitMQConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
 
     @RabbitListener(queues = {"${rabbitmq.queue.name}"})
-    public void consumeMessage(Dummy dummy) {
+    public void consumeMessage(Datacollection datacollection) {
         // TODO: Get proper data and do statistic analysis
-        LOGGER.info(String.format("Received JSON message -> %s", dummy.toString()));
+        LOGGER.info(String.format("Received JSON message -> %s", datacollection.toString()));
     }
 }

@@ -3,18 +3,13 @@ package com.micro.streaming.analytics.amplia.producer;
 import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import com.micro.streaming.analytics.amplia.dto.Datapoints;
 import com.micro.streaming.analytics.amplia.dto.Datastreams;
-import com.micro.streaming.analytics.amplia.dto.Dummy;
-import jdk.jfr.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
-import java.util.Random;
 
 @Service
 public class RabbitMQProducer {
@@ -35,7 +30,7 @@ public class RabbitMQProducer {
     }
 
     // Generate dummy object every 3 seconds
-    @Scheduled(fixedDelay = 3000)
+    // @Scheduled(fixedDelay = 3000)
     public void generateData() {
         // We create a list of datapoints
         ArrayList<Datapoints> datapointsList = new ArrayList<Datapoints>();
