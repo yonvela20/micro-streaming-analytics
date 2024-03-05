@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class Datapoints {
     private Number at;
-    private Number from;
     private Object value;
 
     public Number getAt() {
@@ -14,14 +13,6 @@ public class Datapoints {
 
     public void setAt(Number at) {
         this.at = at;
-    }
-
-    public Number getFrom() {
-        return from;
-    }
-
-    public void setFrom(Number from) {
-        this.from = from;
     }
 
     public Object getValue() {

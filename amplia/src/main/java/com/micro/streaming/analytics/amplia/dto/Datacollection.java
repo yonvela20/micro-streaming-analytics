@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Datacollection {
     // TODO: Ask for more in depth object values
     @Id
-    private Integer id;
+    private String id;
 
     private String version;
     private ArrayList<Datastreams> datastreams;
