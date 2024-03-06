@@ -60,6 +60,7 @@ public class RabbitMQConsumer {
             datastreamAnalysis.setMedia(StatisticsHelper.getMedia(valuesSet));
             datastreamAnalysis.setMediana(StatisticsHelper.getMediana(valuesSet));
             datastreamAnalysis.setModa(StatisticsHelper.getModa(valuesSet));
+            datastreamAnalysis.setDesviacionEstandar(StatisticsHelper.getDesviacionEstandar(valuesSet));
             datastreamAnalysis.setCuartiles(StatisticsHelper.getCuartiles(valuesSet));
             datastreamAnalysis.setMaxValue(StatisticsHelper.getMaxValue(valuesSet));
             datastreamAnalysis.setMinValue(StatisticsHelper.getMinValue(valuesSet));

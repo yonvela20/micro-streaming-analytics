@@ -46,7 +46,7 @@ public class RabbitMQProducer {
         ArrayList<Datastreams> datastreamsList = new ArrayList<Datastreams>();
 
         // Number of datastreams that'll have the object
-        int datastreamsNum = new Random().nextInt(1, 3);
+        int datastreamsNum = new Random().nextInt(1, 5);
 
         for (int i = 0; i < datastreamsNum; i++) {
             // We fill a datastream obj with hardcoded values
@@ -55,7 +55,7 @@ public class RabbitMQProducer {
             datastream.setFeed(String.format("feed_%s", i+1));
 
             // Random iteration just so we can have multiple datapoint
-            int datapointsNum = new Random().nextInt(1, 3);
+            int datapointsNum = new Random().nextInt(1, 10);
             // We create a list of datapoints that current datastream will have
             ArrayList<Datapoints> datapointsList = new ArrayList<Datapoints>();
             for (int j = 0; j < datapointsNum; j++) {
