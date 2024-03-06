@@ -1,13 +1,21 @@
 package com.micro.streaming.analytics.amplia.config;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.CollectionLikeType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class RabbitMQConfig {
@@ -23,7 +31,7 @@ public class RabbitMQConfig {
 
     // spring bean for queue
     @Bean
-    public Queue jsonQueue(){
+    public Queue jsonQueue() {
         return new Queue(queue);
     }
 
@@ -35,7 +43,7 @@ public class RabbitMQConfig {
 
     // binding between queue and exchange using routing key
     @Bean
-    public Binding jsonBinding(){
+    public Binding jsonBinding() {
         return BindingBuilder
                 .bind(jsonQueue())
                 .to(exchange())
@@ -53,4 +61,14 @@ public class RabbitMQConfig {
         rabbitTemplate.setMessageConverter(converter());
         return rabbitTemplate;
     }
+
+//    @Bean
+//    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+//
+//        factory.setConnectionFactory(connectionFactory);
+//        factory.setBatchListener(true);
+//        factory.setBatchSize(2);
+//        return factory;
+//    }
 }
