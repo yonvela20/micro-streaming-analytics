@@ -3,8 +3,6 @@ package com.micro.streaming.analytics.amplia.producer;
 import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import com.micro.streaming.analytics.amplia.dto.Datapoints;
 import com.micro.streaming.analytics.amplia.dto.Datastreams;
-import com.micro.streaming.analytics.amplia.dto.Dummy;
-import jdk.jfr.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,55 +32,54 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    // Generate dummy object every 3 seconds
-    // @Scheduled(fixedDelay = 3000)
-    public void sendMessage(){
-        // TODO: Generate a proper object following opengate doc
-        Dummy dummy = new Dummy();
+    // Generate an opengate object every 10 seconds and send it to rabbitmq
+    @Scheduled(fixedDelay = 10000)
+    public void generateData() {
+        Datacollection datacollection = generateDatacollectionObject();
 
-        dummy.setId(new Random().nextInt(10));
-        dummy.setFirstName("new user " + dummy.getId());
-        dummy.setLastName("generic info");
-
-        LOGGER.info(String.format("Message sent -> %s", dummy.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingKey, dummy);
+        LOGGER.info(String.format("New object created at -> %s", Instant.now()));
+        rabbitTemplate.convertAndSend(exchange, routingKey, datacollection);
     }
 
-
-    @Scheduled(fixedDelay = 3000)
-    public void generateData() {
-        // We create a list of datapoints
-        ArrayList<Datapoints> datapointsList = new ArrayList<Datapoints>();
-
-        // We fill a datapoint obj with dummy values
-        Datapoints datapoint = new Datapoints();
-        datapoint.setAt(128368);
-        datapoint.setFrom(128368);
-        datapoint.setValue("value");
-
-        // We add the datapoint to the datapoint list
-        datapointsList.add(datapoint);
-
+    private Datacollection generateDatacollectionObject() {
         // We create a list of datastreams
         ArrayList<Datastreams> datastreamsList = new ArrayList<Datastreams>();
 
-        // We fill a datastream obj with dummy values
-        Datastreams datastream = new Datastreams();
-        datastream.setId("temperature");
-        datastream.setFeed("feed_1");
-        datastream.setDatapoints(datapointsList);
+        // Number of datastreams that'll have the object
+        int datastreamsNum = new Random().nextInt(1, 5);
 
-        // We add a datastream to the datastream
-        datastreamsList.add(datastream);
+        for (int i = 0; i < datastreamsNum; i++) {
+            // We fill a datastream obj with hardcoded values
+            Datastreams datastream = new Datastreams();
+            datastream.setId("temperature");
+            datastream.setFeed(String.format("feed_%s", i+1));
+
+            // Random iteration just so we can have multiple datapoint
+            int datapointsNum = new Random().nextInt(1, 10);
+            // We create a list of datapoints that current datastream will have
+            ArrayList<Datapoints> datapointsList = new ArrayList<Datapoints>();
+            for (int j = 0; j < datapointsNum; j++) {
+                // We fill a datapoint obj with dummy values
+                Datapoints datapoint = new Datapoints();
+                datapoint.setAt(Instant.now().toEpochMilli());
+
+                // Generate temperature between -10 and 50 Cº
+                datapoint.setValue(new Random().nextInt(-10, 51));
+
+                // We add the datapoint to the datapoint list
+                datapointsList.add(datapoint);
+            }
+
+            datastream.setDatapoints(datapointsList);
+            // We add a datastream to the datastream
+            datastreamsList.add(datastream);
+        }
 
         // Fill the rest of the object
         Datacollection datacollection = new Datacollection();
         datacollection.setVersion("1.0.0");
         datacollection.setDatastreams(datastreamsList);
 
-        LOGGER.info(String.format("New object created -> %s", datacollection.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingKey, datacollection);
+        return datacollection;
     }
 }
-
-
