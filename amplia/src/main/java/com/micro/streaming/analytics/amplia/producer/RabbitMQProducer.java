@@ -32,7 +32,7 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    // Generate an opengate object every 5 seconds and send it to rabbitmq
+    // Generate an opengate object every 10 seconds and send it to rabbitmq
     @Scheduled(fixedDelay = 10000)
     public void generateData() {
         Datacollection datacollection = generateDatacollectionObject();
