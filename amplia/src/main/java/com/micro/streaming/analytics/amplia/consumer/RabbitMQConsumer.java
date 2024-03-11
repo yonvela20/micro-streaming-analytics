@@ -1,6 +1,5 @@
 package com.micro.streaming.analytics.amplia.consumer;
 
-import com.micro.streaming.analytics.amplia.dao.DatacollectionRepository;
 import com.micro.streaming.analytics.amplia.dao.StatisticsAnalysisRepository;
 import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import com.micro.streaming.analytics.amplia.dto.Datastreams;
@@ -12,10 +11,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class RabbitMQConsumer {
@@ -27,17 +24,16 @@ public class RabbitMQConsumer {
     // TODO: Make this consume a batch not a single message
     @RabbitListener(queues = {"${rabbitmq.queue.name}"})
     public void consumeMessage(Datacollection datacollection) {
-        LOGGER.info(String.format("Data recieved at %s ", Instant.now()));
-        LOGGER.info(String.format("Data looks like this %s", datacollection.toString()));
-
         ArrayList<Datastreams> datastreams = datacollection.getDatastreams();
 
         StatisticsAnalysis stats = createStatisticsObject(datastreams);
+        LOGGER.info(String.format("New stat object created... -> %s", stats.toString()));
         repository.save(stats);
     }
 
     private StatisticsAnalysis createStatisticsObject(ArrayList<Datastreams> datastreams) {
         StatisticsAnalysis stats = new StatisticsAnalysis();
+        stats.setTimestamp(String.valueOf(Instant.now()));
         ArrayList<StatisticsAnalysis.DatastreamAnalysis> dsAnalysis = new ArrayList<StatisticsAnalysis.DatastreamAnalysis>();
 
         datastreams.forEach((Datastreams ds) -> {

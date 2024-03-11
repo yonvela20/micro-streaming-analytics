@@ -3,8 +3,6 @@ package com.micro.streaming.analytics.amplia.producer;
 import com.micro.streaming.analytics.amplia.dto.Datacollection;
 import com.micro.streaming.analytics.amplia.dto.Datapoints;
 import com.micro.streaming.analytics.amplia.dto.Datastreams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,9 +21,6 @@ public class RabbitMQProducer {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
-
     private RabbitTemplate rabbitTemplate;
 
     public RabbitMQProducer(RabbitTemplate rabbitTemplate) {
@@ -37,7 +32,6 @@ public class RabbitMQProducer {
     public void generateData() {
         Datacollection datacollection = generateDatacollectionObject();
 
-        LOGGER.info(String.format("New object created at -> %s", Instant.now()));
         rabbitTemplate.convertAndSend(exchange, routingKey, datacollection);
     }
 
