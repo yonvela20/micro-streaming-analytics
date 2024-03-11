@@ -12,6 +12,7 @@ import java.util.Optional;
 public class StatisticsAnalysis {
     @Id
     private String id;
+    private String timestamp;
     private ArrayList<DatastreamAnalysis> datastreamsAnalysis; // This is the id of the datacollection
 
     public String getId() {
@@ -20,6 +21,14 @@ public class StatisticsAnalysis {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public ArrayList<DatastreamAnalysis> getDatastreamsAnalysis() {

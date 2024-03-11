@@ -1,0 +1,41 @@
+version: '3'
+services: 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    restart: "always"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - amplia-network
+  
+  database:
+    image: mongo:5
+    container_name: mongodb
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - '27017-27019:27017-27019'
+    networks:
+      - amplia-network
+    
+ 
+  backend:
+    container_name: micro-streaming-analytics
+    ports:
+      - 8080:8080
+    build:
+      context: ./amplia
+      dockerfile: Dockerfile
+    networks:
+      - amplia-network
+    depends_on:
+      - rabbitmq
+      - database
+
+networks:
+  amplia-network: {}
+
+  
