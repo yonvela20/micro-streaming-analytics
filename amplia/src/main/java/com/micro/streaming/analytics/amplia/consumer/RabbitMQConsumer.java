@@ -24,19 +24,15 @@ public class RabbitMQConsumer {
     @Autowired
     StatisticsAnalysisRepository repository;
 
+    // TODO: Make this consume a batch not a single message
     @RabbitListener(queues = {"${rabbitmq.queue.name}"})
     public void consumeMessage(Datacollection datacollection) {
-        // TODO: Get proper data and do statistic analysis
         LOGGER.info(String.format("Data recieved at %s ", Instant.now()));
         LOGGER.info(String.format("Data looks like this %s", datacollection.toString()));
 
         ArrayList<Datastreams> datastreams = datacollection.getDatastreams();
 
-        // TODO: Save this object in mongodb
         StatisticsAnalysis stats = createStatisticsObject(datastreams);
-
-        LOGGER.info(String.format("DATOS ---> %s", stats.toString()));
-
         repository.save(stats);
     }
 
